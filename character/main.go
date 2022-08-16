@@ -12,53 +12,43 @@ func main() {
 	fmt.Println("RESULT =>", isocc)
 }
 
-func isOnceChangesChar(char1 string, char2 string) bool {
-
-	if char1 == "" || char2 == "" {
+func isOnceChangesChar(str1 string, str2 string) bool {
+	if str1 == "" || str2 == "" {
 		return false
 	}
 
-	char1 = strings.ToLower(char1)
-	char2 = strings.ToLower(char2)
+	str1 = strings.ToLower(str1)
+	str2 = strings.ToLower(str2)
 
-	if char1 == char2 {
+	if str1 == str2 {
 		return true
-	}
-
-	lenDiff := len(char1) - len(char2)
-
-	if lenDiff < 0 {
-		lenDiff = lenDiff * -1
-	}
-	if lenDiff > 1 {
-		return false
-	}
-
-	a := []string{}
-	b := []string{}
-
-	for _, rune1 := range char1 {
-		a = append(a, string(rune1))
-	}
-
-	for _, rune2 := range char2 {
-		b = append(b, string(rune2))
 	}
 
 	a1 := []string{}
 	b1 := []string{}
 
+	for _, rune1 := range str1 {
+		a1 = append(a1, string(rune1))
+	}
+
+	for _, rune2 := range str2 {
+		b1 = append(b1, string(rune2))
+	}
+
 	isSameLen := 0
-	if len(a) > len(b) {
-		a1 = a
-		b1 = b
-	} else if len(a) == len(b) {
-		a1 = a
-		b1 = b
+	if len(a1) < len(b1) {
+		a1 = b1
+		b1 = a1
+	} else if len(a1) == len(b1) {
+		a1 = b1
+		b1 = a1
 		isSameLen++
-	} else {
-		a1 = b
-		b1 = a
+	}
+
+	lenDiff := len(a1) - len(b1)
+
+	if lenDiff > 1 {
+		return false
 	}
 
 	n := 0
