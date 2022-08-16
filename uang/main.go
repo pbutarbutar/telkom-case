@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	rs := countOfMoney(6090)
+	rs := countOfMoney(145000)
 	fmt.Println("Result", rs)
 }
 
