@@ -22,7 +22,7 @@ func NewCartsRepositoryImpl(db *bun.DB, logger *zap.Logger) CartsRepository {
 	}
 }
 
-func (c CartsRepositoryImpl) IsExistProductByCode(ctx context.Context, in *pbCarts.AddProductRequest) (isExist bool, err error) {
+func (c CartsRepositoryImpl) IsExistProductByCode(ctx context.Context, in *pbCarts.AddProductRequest) (isExist bool, carts *entities.Carts, err error) {
 	cartsMdl := entities.Carts{
 		ProductCode: in.ProductCode,
 		ProductName: in.ProductName,
@@ -37,7 +37,7 @@ func (c CartsRepositoryImpl) IsExistProductByCode(ctx context.Context, in *pbCar
 		return
 	}
 
-	return
+	return isExist, &cartsMdl, nil
 }
 
 func (c CartsRepositoryImpl) AddProduct(ctx context.Context, in *pbCarts.AddProductRequest) (result entities.Carts, err error) {
@@ -96,12 +96,12 @@ func (c CartsRepositoryImpl) DeleteProduct(ctx context.Context, productCode stri
 	return true, nil
 }
 
-func (c CartsRepositoryImpl) ViewProduct(ctx context.Context) (result []entities.Carts, err error) {
-	err = c.DB.NewSelect().Model(&result).Scan(ctx)
+func (c CartsRepositoryImpl) ViewProducts(ctx context.Context) (result []entities.Carts, err error) {
+	resultData := []entities.Carts{}
+	err = c.DB.NewSelect().Model(&resultData).Scan(ctx)
 	if err != nil {
 		c.Logger.Error("CartsRepositoryImpl#ViewProduct error: ", zap.Any("message", err))
 		return
 	}
-
-	return
+	return resultData, nil
 }

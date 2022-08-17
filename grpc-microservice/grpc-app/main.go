@@ -5,10 +5,8 @@ import (
 	"grpc-microservice/config"
 	pbHealth "grpc-microservice/grpc-app/protos"
 	pbCarts "grpc-microservice/grpc-app/protos/carts"
-	pbUsers "grpc-microservice/grpc-app/protos/users"
 	cartsInjector "grpc-microservice/grpc-app/service/injector/carts"
 	healthInjector "grpc-microservice/grpc-app/service/injector/health"
-	usersInjector "grpc-microservice/grpc-app/service/injector/users"
 	"grpc-microservice/grpc-app/service/interceptor"
 	"log"
 	"net"
@@ -49,11 +47,9 @@ func main() {
 	reflection.Register(grpcServer)
 
 	healthService, _ := healthInjector.InitializeHealthServerService()
-	usersService, _ := usersInjector.InitializeUsersService()
 	cartService, _ := cartsInjector.InitializeCartsService()
 
 	pbHealth.RegisterHealthServer(grpcServer, healthService)
-	pbUsers.RegisterUserServiceServer(grpcServer, usersService)
 	pbCarts.RegisterCartsServiceServer(grpcServer, cartService)
 
 	done := make(chan os.Signal, 1)

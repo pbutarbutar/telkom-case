@@ -53,7 +53,23 @@ func (interceptor *AuthInterceptor) Unary(opts ...Option) grpc.UnaryServerInterc
 		interceptor.Logger.Sugar().Infow("--> unary interceptor: " + info.FullMethod)
 		var userAuthClaim *middleware.User
 
-		if info.FullMethod != "/grpc.health.v1.Health/Check" {
+		methodsWithoutTokenLogin := []string{
+			"/grpc.health.v1.Health/Check",
+			"/carts.CartsService/AddProduct",
+			"/carts.CartsService/ViewProduct",
+			"/carts.CartsService/DeleteProduct",
+		}
+
+		methodeWithToken := true
+		for _, mtd := range methodsWithoutTokenLogin {
+			if mtd == info.FullMethod {
+				methodeWithToken = false
+				break
+			}
+		}
+
+		//Add Authorization bearer
+		if methodeWithToken {
 			usr, err := interceptor.authorize(ctx, info.FullMethod)
 			if err != nil {
 				return nil, err

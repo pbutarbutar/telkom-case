@@ -44,7 +44,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 			rows := sqlmock.NewRows([]string{"product_code"}).AddRow(true)
 			mockDB.ExpectQuery("SELECT (.+)").WillReturnRows(rows)
 
-			res, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{
+			res, carts, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{
 				ProductCode: "P001",
 				ProductName: "Product 1",
 				Quantity:    2,
@@ -53,13 +53,15 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 
 			Expect(err).To(BeNil())
 			Expect(res).To(BeTrue())
+			Expect(carts.ProductCode).To(Equal("P001"))
+
 		})
 
 		It("Not Found", func() {
 			rows := sqlmock.NewRows([]string{"product_code"}).AddRow(false)
 			mockDB.ExpectQuery("SELECT (.+)").WillReturnRows(rows)
 
-			res, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{
+			res, _, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{
 				ProductCode: "P001",
 				ProductName: "Product 1",
 				Quantity:    2,
@@ -68,12 +70,13 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 
 			Expect(err).To(BeNil())
 			Expect(res).To(BeFalse())
+
 		})
 
 		It("FAIL", func() {
 			mockDB.ExpectQuery("SELECT (.+)").WillReturnError(fmt.Errorf("error"))
 
-			res, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{})
+			res, _, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{})
 
 			Expect(err).NotTo(BeNil())
 			Expect(res).To(BeFalse())
@@ -102,7 +105,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 		It("FAIL", func() {
 			mockDB.ExpectExec("INSERT (.+)").WillReturnError(fmt.Errorf("error"))
 
-			_, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{})
+			_, err := cartRepo.AddProduct(context.Background(), &pbCarts.AddProductRequest{})
 
 			Expect(err).NotTo(BeNil())
 		})
@@ -130,7 +133,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 		It("FAIL", func() {
 			mockDB.ExpectExec("UPDATE (.+)").WillReturnError(fmt.Errorf("error"))
 
-			_, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{})
+			_, err := cartRepo.UpdateCart(context.Background(), &pbCarts.AddProductRequest{})
 
 			Expect(err).NotTo(BeNil())
 		})
@@ -151,7 +154,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 		It("FAIL", func() {
 			mockDB.ExpectExec("DELETE (.+)").WillReturnError(fmt.Errorf("error"))
 
-			_, err := cartRepo.IsExistProductByCode(context.Background(), &pbCarts.AddProductRequest{})
+			_, err := cartRepo.DeleteProduct(context.Background(), "")
 
 			Expect(err).NotTo(BeNil())
 		})
@@ -164,7 +167,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 				AddRow("P001", "Product 1", "2")
 			mockDB.ExpectQuery("SELECT (.+)").WillReturnRows(result)
 
-			res, err := cartRepo.ViewProduct(context.Background())
+			res, err := cartRepo.ViewProducts(context.Background())
 
 			Expect(err).To(BeNil())
 
@@ -177,7 +180,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 			rows := sqlmock.NewRows([]string{"product_code"}).AddRow("")
 			mockDB.ExpectQuery("SELECT (.+)").WillReturnRows(rows)
 
-			res, err := cartRepo.ViewProduct(context.Background())
+			res, err := cartRepo.ViewProducts(context.Background())
 			Expect(err).To(BeNil())
 			Expect(res[0].ProductCode).To(Equal(""))
 		})
@@ -185,7 +188,7 @@ var _ = Describe("Checking Cart Repository", Ordered, func() {
 		It("FAIL", func() {
 			mockDB.ExpectQuery("SELECT (.+)").WillReturnError(fmt.Errorf("error"))
 
-			_, err := cartRepo.ViewProduct(context.Background())
+			_, err := cartRepo.ViewProducts(context.Background())
 
 			Expect(err).NotTo(BeNil())
 		})

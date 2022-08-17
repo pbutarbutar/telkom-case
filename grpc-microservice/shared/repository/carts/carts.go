@@ -8,8 +8,8 @@ import (
 
 type CartsRepository interface {
 	AddProduct(ctx context.Context, in *pbCarts.AddProductRequest) (result entities.Carts, err error)
-	IsExistProductByCode(ctx context.Context, in *pbCarts.AddProductRequest) (isExist bool, err error)
+	IsExistProductByCode(ctx context.Context, in *pbCarts.AddProductRequest) (isExist bool, carts *entities.Carts, err error)
 	UpdateCart(ctx context.Context, in *pbCarts.AddProductRequest) (result entities.Carts, err error)
 	DeleteProduct(ctx context.Context, productCode string) (result bool, err error)
-	ViewProduct(ctx context.Context) (result []entities.Carts, err error)
+	ViewProducts(ctx context.Context) (result []entities.Carts, err error)
 }
