@@ -14,9 +14,10 @@ go mod tidy
 #Set .env value MYSQL_URL 
 
 #Run Migrations
-
+```
 1. go run cmd/bun/main.go db init
 2. go run cmd/bun/main.go db migrate
+```
 
 #Start Service
 ```> make run-grpc
