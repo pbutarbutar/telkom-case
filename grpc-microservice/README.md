@@ -26,6 +26,9 @@ go run grpc-app/main.go
 ts=2022-08-17T14:02:21.922+0700 level=info msg="GRPC service started on port :50051"
 ```
 
+
+
 #Run to simulation endpoint using BloomRPC
+https://github.com/pbutarbutar/telkom-case/tree/main/grpc-microservice/run-result
 
 
