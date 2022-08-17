@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package carts;
+
+option go_package = "./";
+
+service CartsService {
+    rpc AddProduct (AddProductRequest) returns (ProductResponse) {}
+    rpc DeleteProduct (DeleteProductRequest) returns (ActionResponse) {}
+    rpc ViewProduct (Empty) returns (ProductsListResponse) {}
+    
+}
+
+message Empty {}
+
+message AddProductRequest {
+    string product_code = 1;
+    string product_name = 2;
+    int32 quantity = 3;
+}
+
+message DeleteProductRequest {
+    string code_product = 1;
+}
+
+message ProductResponse {
+    string code_product = 1;
+    string product_name = 2;
+    int32 quantity = 3;
+}
+
+message ActionResponse {
+    bool success = 1;
+    string msg = 2;
+}
+
+message ProductsListResponse {
+    repeated ProductResponse products_list = 1;
+}
