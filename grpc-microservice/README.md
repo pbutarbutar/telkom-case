@@ -6,6 +6,7 @@ GO version 1.17
 
 Run first
 ```console
+cd $GOPATH/src/grpc-microservice
 go mod tidy
 ```
 
