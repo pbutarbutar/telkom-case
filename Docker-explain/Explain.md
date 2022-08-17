@@ -8,7 +8,7 @@ ENTRYPOINT /go/bin/indihome
 LISTEN 80
 
 
-#Should changed like below using go mod,
+#Should changed use go mod like below
 
 FROM golang
 ADD . /go/src/github.com/telkomdev/indihome/backend
