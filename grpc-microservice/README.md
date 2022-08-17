@@ -17,3 +17,9 @@ go mod tidy
 
 1. go run cmd/bun/main.go db init
 2. go run cmd/bun/main.go db migrate
+
+#Start Service
+```> make run-grpc
+go run grpc-app/main.go
+ts=2022-08-17T14:02:21.922+0700 level=info msg="GRPC service started on port :50051"
+```
